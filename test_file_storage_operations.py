@@ -7,22 +7,16 @@ import datetime
 from api_client import APIClient
 
 client=APIClient()
-filepath = Path("D:\Testing data\test.txt")
-stats=filepath.stat()
+filepath = Path(r"D:\Testing data\test.txt")
 
-ext=Path(r"D:\Testing data\test.txt").suffix
-
-filename=filepath.name
-
-
-Meta_data={
-    "file_name":filepath.name,
-    "file_type":ext,
-    "file_size":stats.st_size,
-    "file_path":
-}
 
 def test_upload():
-    response = client.post("/api/File_Storage_Operations/Upload_File",file_type,'13')
+    url="/api/File_Storage_Operations/Upload_File"
+    params={'userId':15}
+
+    with open(filepath,"rb") as f:
+        files = {'file': (filepath.name, f, 'text/plain')}
+        response=client.post(url,params=params, files=files)
+
     assert response.status_code==200
     assert "success" in response.text.lower()
